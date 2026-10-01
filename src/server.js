@@ -9,6 +9,8 @@ import routes from './routes/index.js';
 import { sequelize } from './config/config.js';
 
 const app = express();
+// Atrás do Nginx: usa o X-Forwarded-For para registrar o IP real do cliente no log
+app.set('trust proxy', 1);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const accessLogStream = fs.createWriteStream(

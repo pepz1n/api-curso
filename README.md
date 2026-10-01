@@ -50,11 +50,12 @@ Ao marcar `done: true`, a API grava em `done_at` a hora em que a tarefa foi fina
 
 Exemplos prontos em `requests.http` (extensão REST Client do VS Code).
 
-## Deploy no EC2
+## Docker / Deploy na EC2
+
+A API e o banco rodam juntos via Docker na mesma EC2. O `docker-compose.yml` e o passo a passo do deploy ficam no repositório **api-curso-db**, que deve ficar na mesma pasta que este:
 
 ```
-npm install --omit=dev
-pm2 start src/index.js --name api
+curso/
+├── api-curso/
+└── api-curso-db/
 ```
-
-Para atualizar depois: `./deploy.sh`.
