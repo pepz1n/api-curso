@@ -1,0 +1,70 @@
+# Funciona com a extensão REST Client do VS Code.
+# Troque @base pelo IP da instância EC2 no deploy.
+@base = http://localhost:3000
+
+### Health check
+GET {{base}}/health
+
+### Cadastrar usuário (retorna o token)
+POST {{base}}/users/persist
+Content-Type: application/json
+
+{ "name": "Ana", "email": "ana@teste.com", "password": "123456" }
+
+### Login (copie o token da resposta para @token)
+# @name login
+POST {{base}}/users/login
+Content-Type: application/json
+
+{ "email": "ana@teste.com", "password": "123456" }
+
+###
+@token = {{login.response.body.token}}
+
+### Meus dados
+GET {{base}}/users/me
+Authorization: Bearer {{token}}
+
+### Atualizar meu usuário
+POST {{base}}/users/persist/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "name": "Ana Maria" }
+
+### Listar tarefas
+GET {{base}}/tasks
+Authorization: Bearer {{token}}
+
+### Listar só as concluídas
+GET {{base}}/tasks?done=true
+Authorization: Bearer {{token}}
+
+### Criar tarefa
+POST {{base}}/tasks/persist
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "title": "Minha primeira tarefa" }
+
+### Criar tarefa inválida (espera erro)
+POST {{base}}/tasks/persist
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "title": "" }
+
+### Buscar por id
+GET {{base}}/tasks/1
+Authorization: Bearer {{token}}
+
+### Concluir tarefa (grava done_at com a hora atual)
+POST {{base}}/tasks/persist/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "done": true }
+
+### Remover tarefa
+DELETE {{base}}/tasks/1
+Authorization: Bearer {{token}}
